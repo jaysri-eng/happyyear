@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   late AnimationController _controller;
   late final Animation<AlignmentGeometry> _alignAnimation;
-  late final Animation<double> _rotationAnimation;
+  late final Animation<Offset> _offsetAnimation;
 
   @override
   void initState(){
@@ -38,12 +38,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       duration: const Duration(milliseconds: 900),
       vsync: this)..repeat(reverse: true);
     _alignAnimation = Tween<AlignmentGeometry>(
-      begin: Alignment.topLeft,
-      end: Alignment.topRight,
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
     ).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOutCirc),
     );
-    _rotationAnimation = Tween<double>(begin: 0,end: 2).animate(
+    _offsetAnimation = Tween<Offset>(begin: Offset.zero,end: Offset.fromDirection(1.5,0.0),
+      ).animate(
       CurvedAnimation(parent: _controller, curve:Curves.easeInOutCirc),
     );
   }
@@ -57,8 +58,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Happy New Year',style: TextStyle(
-          fontSize: 15,
+          fontSize: 20,
           fontWeight: FontWeight.w500,
         ),),
       ),
@@ -68,8 +70,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           children: [
             AlignTransition(
               alignment: _alignAnimation,
-              child: RotationTransition(
-                turns: _rotationAnimation,
+              child: SlideTransition(
+                position: _offsetAnimation,
                 child: Image.asset('assets/happy-new-year.png',height: 150,width: 150,),
               ),
             ),
